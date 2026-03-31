@@ -1,0 +1,39 @@
+{
+  "build": {
+    "BUILD": "$(MODDABLE)/build",
+    "IO": "$(MODDABLE)/modules/io",
+    "EXAMPLES": "$(MODDABLE)/examples",
+    "MYMODULES": "C:/Users/louis/OneDrive/Apps/Repos/IoT/Moddable/modules/"
+  },
+  "include": [
+    "$(EXAMPLES)/manifest_base.json",
+    "$(EXAMPLES)/manifest_net.json",
+    "$(MODULES)/network/http/manifest.json",
+    "$(MODDABLE)/modules/io/manifest.json",
+    "$(MODULES)/base/structuredClone/manifest.json",
+    "$(MODDABLE)/modules/files/preference/manifest.json",
+    "$(MODDABLE)/modules/files/file/manifest.json",
+    "$(MYMODULES)/util/build/manifest.json",
+    "./somfy_cc1101/manifest.json"
+  ],
+  "modules": {
+    "main": "./main"
+  },
+  "config": {
+    "ssid": "HaakakkerN_IoT",
+    "password": "IoT@HaakAkker",
+    "mdns": "somfy_rts",
+    "sntp": "0.nl.pool.ntp.org",
+    "repeats": 3,
+    "motors": {
+      "11": { "name": "LuifelGroep", "rolling": 0 },
+      "21": { "name": "Schuifdeur Tuin", "rolling": 69 },
+      "31": { "name": "Luifel", "rolling": 22 },
+      "40": { "name": "Veranda", "rolling": 66 },
+      "42": { "name": "Zijraam", "rolling": 46 },
+      "43": { "name": "Schuifdeur Links", "rolling": 3 },
+      "44": { "name": "Schuifdeur Rechts", "rolling": 1 },
+      "51": { "name": "Voorraam", "rolling": 121 }
+    }
+  }
+}

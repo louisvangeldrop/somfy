@@ -10,7 +10,7 @@ const ssid = config.ssid;
 const password = config.password;
 const hostName = config.mdns;
 
-var repeats = config.repeats || 3; // Default aantal herhalingen als niet gespecificeerd in config
+var repeats = config.repeats || 5; // Default aantal herhalingen als niet gespecificeerd in config
 
 let motors = structuredClone(config.motors)
 

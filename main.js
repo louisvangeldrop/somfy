@@ -1,5 +1,6 @@
 import { Server } from "http";
 import Net from "net";
+import MDNS from "mdns";
 import { File, Iterator, System } from "file";
 import structuredClone from "structuredClone";
 import config from "mc/config";
@@ -7,6 +8,8 @@ import * as Somfy from "somfy";
 
 const ssid = config.ssid;
 const password = config.password;
+const hostName = config.mdns;
+
 var repeats = config.repeats || 3; // Default aantal herhalingen als niet gespecificeerd in config
 
 let motors = structuredClone(config.motors)
@@ -47,6 +50,19 @@ somfy.initCC1101()
 async function setup() {
 	let ip = Net.get("IP");
 	trace(`Gebruik: http://${ip}/somfy?id=11&action=up\n`);
+
+	try {
+		let mdns = new MDNS({ hostName }, function (message, value) {
+			if (MDNS.hostName === message) {
+				// hostName = value;
+				return value;
+			}
+		});
+	}
+	catch (e) {
+		trace(`mdns catch: ${e}\n`);
+		rej(e);
+	}
 
 	const server = new Server({ port: 80 });
 	server.callback = function (message, value) {

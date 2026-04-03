@@ -1,6 +1,6 @@
 import SPI from "embedded:io/spi";
 import Digital from "embedded:io/digital";
-import Time from "time";
+import digitalPulse from "digitalPulse";
 import config from "mc/config";
 
 const spiConfig = config.spi || {};
@@ -109,15 +109,6 @@ export const somfyCommands = {
 	PROG: 0x8,
 	SUN_FLAG: 0x9,
 	CFLAG: 0xA
-}
-
-function digitalPulse(pin, value, width) {
-	for (let time of width) {
-		const endTime = Time.microseconds + time;
-		pin.write(value);
-		while (Time.delta(Time.microseconds, endTime) > 0) { } // Timer.delay(time);
-		value ^= 1;
-	}
 }
 
 function writeCommand(reg) {

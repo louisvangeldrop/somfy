@@ -1,0 +1,6 @@
+{
+  "modules": {
+    "*": "./*",
+    "digitalPulse": "./digitalPulse"
+  }
+}

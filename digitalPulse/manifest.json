@@ -1,4 +1,8 @@
 {
+  "include": [
+    "$(MODULES)/base/microseconds/manifest.json",
+    "$(MODDABLE)/modules/io/manifest.json"
+  ],
   "modules": {
     "*": "./*",
     "digitalPulse": "./digitalPulse"

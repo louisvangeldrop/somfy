@@ -2,6 +2,8 @@
 // 	return native("xs_digitalPulse").call(this, pin, pulses);
 // }
 
+import Time from "time";
+
 export default function digitalPulse(pin, value, width) {
 	for (let time of width) {
 		const endTime = Time.microseconds + time;

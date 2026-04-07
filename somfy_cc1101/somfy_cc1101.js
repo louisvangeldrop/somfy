@@ -10,7 +10,7 @@ const spi = new SPI({ ...defaultSPIConfig, ...spiConfig });
 const pinTX = new Digital({ pin: cc1101Config.gdo0, mode: Digital.Output });
 const pinCS = new Digital({ pin: cc1101Config.select, mode: Digital.Output });
 
-var symbol = 604
+var symbol = 640
 var timingsUs = [];
 var last = -1; // -1 = start, 0 = low, 1 = high
 
@@ -219,13 +219,17 @@ function getWaveform(payloadData, sync) {
 	addLow(symbol);
 
 	// Manchester enconding of payload data
-	for (let i = 0; i < 56; i++) {
-		if ((payloadData[parseInt(i / 8)] >> (7 - (i % 8))) & 1) {
-			addLow(symbol);
-			addHigh(symbol);
-		} else {
-			addHigh(symbol);
-			addLow(symbol);
+	for (let i = 0; i < 7; i++) {
+		let mask = 0x80
+		while (mask > 0) {
+			if (payloadData[i] & mask) {
+				addLow(symbol);
+				addHigh(symbol);
+			} else {
+				addHigh(symbol);
+				addLow(symbol);
+			}
+			mask >>= 1;
 		}
 	}
 

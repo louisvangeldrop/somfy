@@ -115,7 +115,7 @@ async function setup() {
 				catch (e) {
 					trace(`Fout bij opslaan: ${e}\n`);
 				}
-				return { status: 200, body: `${motor.name} (${id}): ${action} uitgevoerd\n` };
+				return { status: 200, body: JSON.stringify({ ...{ id }, ...motor }) };
 
 			} else {
 				return { status: 404, body: "Gebruik /somfy?id=XX&action=up\n" };

@@ -2,6 +2,7 @@ import SPI from "embedded:io/spi";
 import Digital from "embedded:io/digital";
 import digitalPulse from "digitalPulse";
 import config from "mc/config";
+import Timer from "timer";
 
 const spiConfig = config.spi || {};
 const cc1101Config = config.cc1101 || {}
@@ -254,6 +255,7 @@ export function sendCmd(cmd, address, rollingCode, repeats) {
 	let frame = getPayLoadData(cmd, address, rollingCode)
 	let pulses = getPulses(frame, repeats)
 	writeCommand(CONFIG_REGISTERS.STX)	// STX
+	Timer.delay(5)
 	digitalPulse(pinTX, false, pulses)
 	writeCommand(CONFIG_REGISTERS.SIDLE); // SIDLE
 }

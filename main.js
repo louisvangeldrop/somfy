@@ -96,7 +96,7 @@ async function setup() {
 					motors[id] = motor;
 					saveMotors();
 					this.status = 404;
-					this.write("Onbekende ID\n");
+					this.write(`ID: ${id} added\n`);
 					this.end();
 					return;
 				}
@@ -104,7 +104,7 @@ async function setup() {
 				let cmd = somfy.somfyCommands[action] ?? 0
 
 				if (cmd === 0) {
-					return { status: 404, body: "Onbekend commando.Gebruik UP.DOWN, MY of PROG\n" };
+					return { status: 404, body: "Unknown command. Use UP, DOWN, MY or PROG\n" };
 				}
 
 				somfy.sendCmd(cmd, parseInt(id), motor.rolling, repeats);
@@ -113,15 +113,15 @@ async function setup() {
 					saveMotors();
 				}
 				catch (e) {
-					trace(`Fout bij opslaan: ${e}\n`);
+					trace(`Error during save: ${e}\n`);
 				}
 				return { status: 200, body: JSON.stringify({ ...{ id }, ...motor }) };
 
 			} else {
-				return { status: 404, body: "Gebruik /somfy?id=XX&action=up\n" };
+				return { status: 404, body: "Use /somfy?id=XX&action=up\n" };
 
 			}
 		}
 	}
 }
-setup().catch(e => trace(`Fout: ${e}\n`))
+setup().catch(e => trace(`Error: ${e}\n`))

@@ -18,14 +18,14 @@ The system allows control of multiple Somfy RTS motors through a simple web inte
 
 ## Hardware Requirements
 
-- ESP32 microcontroller with dual-core CPU (original ESP32, not C3, C6, or other single-core variants)
+- ESP32 microcontroller with dual-core CPU (original ESP32, preferably not C3, C6, or other single-core variants)
 - CC1101 433 MHz RF transceiver module
 - SPI connection between ESP32 and CC1101
 - Antenna for 433 MHz transmission
 
 ## Pin Configuration
 
-**Note**: This software requires dual-core ESP32 chips. ESP32-C3 and ESP32-C6 (single-core) are not supported.
+**Note**: This software requires dual-core ESP32 chips. ESP32-C3 and ESP32-C6 (single-core) may work.
 
 ### ESP32 DevKit (recommended)
 - SPI MOSI: GPIO 21
@@ -34,7 +34,7 @@ The system allows control of multiple Somfy RTS motors through a simple web inte
 - CC1101 CS: GPIO 5
 - CC1101 GDO0: GPIO 12
 
-### ESP32-C3 (not supported)
+### ESP32-C3 (not supported?)
 - SPI MOSI: GPIO 7
 - SPI MISO: GPIO 2
 - SPI CLK: GPIO 6
@@ -47,15 +47,15 @@ The system allows control of multiple Somfy RTS motors through a simple web inte
 2. Configure your WiFi credentials in `manifest.json`
 3. Build and flash the project:
    ```bash
-   mcconfig -m -d -p esp32
+   mcconfig -m -p esp32
    ```
    For ESP32-C3 (not recommended, single-core):
    ```bash
-   mcconfig -m -d -p esp32/c3_32s_kit
+   mcconfig -m -p esp32/c3_32s_kit
    ```
    For a clean build, add `-t clean`:
    ```bash
-   mcconfig -m -d -p esp32 -t clean
+   mcconfig -m -p esp32 -t clean
    ```
 
 ## Usage
@@ -81,7 +81,7 @@ http://<device-ip>/somfy?id=<motor-id>&action=<command>&repeats=<count>
 ### Motor Configuration
 
 Motors are configured in `manifest.json` under the `motors` section. Each motor has:
-- `name`: Descriptive name
+- `name`: Descriptive name, optional
 - `rolling`: Current rolling code (auto-incremented)
 
 Rolling codes are automatically saved to `somfy_motors.json` on the device.

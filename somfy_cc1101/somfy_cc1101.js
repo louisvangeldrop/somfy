@@ -256,6 +256,8 @@ export function sendCmd(cmd, address, rollingCode, repeats) {
 	let pulses = getPulses(frame, repeats)
 	writeCommand(CONFIG_REGISTERS.STX)	// STX
 	Timer.delay(5)
-	digitalPulse(pinTX, false, pulses)
+	let value = false
+	pulses = pulses.map(a => { a = value ? a : -a; value ^= 1; return a })
+	digitalPulse(pinTX, pulses)
 	writeCommand(CONFIG_REGISTERS.SIDLE); // SIDLE
 }

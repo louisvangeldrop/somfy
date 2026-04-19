@@ -13,7 +13,6 @@ const pinCS = new Digital({ pin: cc1101Config.select, mode: Digital.Output });
 
 var symbol = 640
 var timingsUs = [];
-var last = -1; // -1 = start, 0 = low, 1 = high
 
 const CONFIG_REGISTERS = {
 	IOCFG2: 0x00,
@@ -156,21 +155,11 @@ export function initCC1101() {
 };
 
 function addHigh(us) {
-	if (last === 1) {
-		timingsUs[timingsUs.length - 1] += us;
-	} else {
-		timingsUs.push(us);
-		last = 1;
-	}
+	timingsUs.push(us);
 }
 
 function addLow(us) {
-	if (last === 0) {
-		timingsUs[timingsUs.length - 1] += us;
-	} else {
-		timingsUs.push(us);
-		last = 0;
-	}
+	timingsUs.push(-us);
 }
 
 function getPayLoadData(cmd, address, rollingCode) {
@@ -242,7 +231,6 @@ function getWaveform(payloadData, sync) {
 
 function getPulses(payloadData, repeats) {
 	timingsUs = [];
-	last = -1;
 	getWaveform(payloadData, 2);
 	for (let i = 0; i < repeats; i++) {
 		getWaveform(payloadData, 7)
@@ -256,8 +244,7 @@ export function sendCmd(cmd, address, rollingCode, repeats) {
 	let pulses = getPulses(frame, repeats)
 	writeCommand(CONFIG_REGISTERS.STX)	// STX
 	Timer.delay(5)
-	let value = false
-	pulses = pulses.map(a => { a = value ? a : -a; value ^= 1; return a })
+	pulses = pulses.map(p => -p)
 	digitalPulse(pinTX, pulses)
 	writeCommand(CONFIG_REGISTERS.SIDLE); // SIDLE
 }

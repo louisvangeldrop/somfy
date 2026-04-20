@@ -1,0 +1,27 @@
+{
+  "build": {
+    "BUILD": "$(MODDABLE)/build",
+    "EXAMPLES": "$(MODDABLE)/examples"
+  },
+  "include": [
+    "$(MODULES)/base/structuredClone/manifest.json",
+    "$(MODDABLE)/modules/files/preference/manifest.json",
+    "$(MODDABLE)/modules/files/file/manifest.json"
+  ],
+  "modules": {
+    "somfy": "./somfy"
+  },
+  "config": {
+    "motors": {
+      "11": { "name": "LuifelGroep", "rolling": 0 },
+      "21": { "name": "Schuifdeur Tuin", "rolling": 162 },
+      "31": { "name": "Luifel Veranda", "rolling": 64 },
+      "32": { "name": "Luifel Zuid", "rolling": 31 },
+      "40": { "name": "Veranda", "rolling": 224 },
+      "42": { "name": "Zijraam", "rolling": 134 },
+      "43": { "name": "Schuifdeur Links", "rolling": 67 },
+      "44": { "name": "Schuifdeur Rechts", "rolling": 55 },
+      "51": { "name": "Voorraam", "rolling": 195 }
+    }
+  }
+}

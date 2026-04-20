@@ -1,8 +1,6 @@
 import { Server } from "http";
 import Net from "net";
 import MDNS from "mdns";
-import { File, Iterator, System } from "file";
-import structuredClone from "structuredClone";
 import config from "mc/config";
 import * as Somfy from "somfy_rf433";
 
@@ -12,39 +10,8 @@ const hostName = config.mdns;
 
 var repeats = config.repeats || 5; // Default aantal herhalingen als niet gespecificeerd in config
 
-let motors = structuredClone(config.motors)
-
-// ==================== Jouw motoren laden ====================
-let file;
-const motorsFileName = config.file.root + "somfy_motors.json";
-try {
-	file = new File(motorsFileName, true);
-	let json = file.read(String);
-	file.close();
-	motors = JSON.parse(json);
-} catch (e) {
-	trace("somfy_motors.json niet gevonden → lege lijst\n");
-}
-
-// Rolling codes omzetten van string naar nummer
-Object.keys(motors).forEach(id => {
-	if (typeof motors[id].rolling === "string") {
-		motors[id].rolling = parseInt(motors[id].rolling, 16);
-	}
-});
-
-function saveMotors() {
-	try {
-		file = new File(motorsFileName, true);
-		file.write(JSON.stringify(motors, null, 2));
-		file.close();
-	}
-	catch (e) {
-		trace(`Fout bij opslaan: ${e}\n`);
-	}
-}
-
 const somfy = Somfy
+var motors = somfy.getMotors();
 
 async function setup() {
 	let ip = Net.get("IP");
@@ -93,7 +60,7 @@ async function setup() {
 				if (!motor) {
 					motor = { name: `Motor ${id}`, rolling: 0 };
 					motors[id] = motor;
-					saveMotors();
+					somfy.saveMotors(motors);
 					this.status = 404;
 					this.write(`ID: ${id} added\n`);
 					this.end();
@@ -109,7 +76,7 @@ async function setup() {
 				somfy.sendCmd(cmd, parseInt(id), motor.rolling, repeats);
 				try {
 					motors[id].rolling += 1
-					saveMotors();
+					somfy.saveMotors(motors);
 				}
 				catch (e) {
 					trace(`Error during save: ${e}\n`);

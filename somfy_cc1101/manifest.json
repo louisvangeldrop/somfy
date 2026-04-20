@@ -7,12 +7,11 @@
   "include": [
     "$(EXAMPLES)/manifest_base.json",
     "$(MODDABLE)/modules/io/manifest.json",
-    "$(MODULES)/base/microseconds/manifest.json",
     "../cc1101/manifest.json",
-    "../digitalPulse/manifest.json"
+    "../digitalPulse/manifest.json",
+    "../somfy/manifest.json"
   ],
   "modules": {
-    "somfy": "../somfy/somfy.js",
     "somfy_cc1101": "./somfy_cc1101.js"
   },
   "config": {}

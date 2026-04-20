@@ -1,3 +1,46 @@
+// Motor management
+import { File, Iterator, System } from "file";
+import structuredClone from "structuredClone";
+import config from "mc/config";
+
+var motors = structuredClone(config.motors)
+
+const motorsFileName = config.file.root + "somfy_motors.json";
+
+try {
+	let file = new File(motorsFileName, true);
+	let json = file.read(String);
+	file.close();
+	motors = JSON.parse(json);
+} catch (e) {
+	trace("somfy_motors.json not found → empty list\n");
+}
+
+// Rolling codes omzetten van string naar nummer
+Object.keys(motors).forEach(id => {
+	if (typeof motors[id].rolling === "string") {
+		motors[id].rolling = parseInt(motors[id].rolling, 16);
+	}
+});
+
+export function getMotors() {
+	return motors;
+}
+
+export function saveMotors(motors) {
+	try {
+		let file = new File(motorsFileName, true);
+		file.write(JSON.stringify(motors, null, 2));
+		file.close();
+	}
+	catch (e) {
+		trace(`Error saving motors: ${e}\n`);
+	}
+}
+//* End of motor management
+
+// SOMFY protocol implementation
+
 var symbol = 640
 var timingsUs = [];
 
@@ -100,5 +143,5 @@ export function sendCmd(cmd, address, rollingCode, repeats) {
 	repeats = repeats || 5
 	let frame = getPayLoadData(cmd, address, rollingCode)
 	getPulses(frame, repeats)
-	return timingsUs  // .map(p => p / 1000); // Scale down timings for digitalPulse (which has a max of 65535 microseconds)
+	return timingsUs
 }

@@ -5,7 +5,9 @@ import config from "mc/config";
 
 cc1101.initCC1101();
 
+export const getMotors = somfy.getMotors;
 export const somfyCommands = somfy.somfyCommands;
+export const saveMotors = somfy.saveMotors;
 
 export function sendCmd(cmd, address, rollingCode, repeats = 3) {
 	cc1101.writeCommand(cc1101.CONFIG_REGISTERS.STX)	// STX

@@ -4,7 +4,7 @@ import MDNS from "mdns";
 import { File, Iterator, System } from "file";
 import structuredClone from "structuredClone";
 import config from "mc/config";
-import * as Somfy from "somfy";
+import * as Somfy from "somfy_rf433";
 
 const ssid = config.ssid;
 const password = config.password;
@@ -45,7 +45,6 @@ function saveMotors() {
 }
 
 const somfy = Somfy
-somfy.initCC1101()
 
 async function setup() {
 	let ip = Net.get("IP");

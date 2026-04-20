@@ -33,8 +33,7 @@ void xs_digitalPulse(xsMachine *the) {
       int level = (delta > 0) ? 1 : 0;
       unsigned long us =
           (delta > 0) ? (unsigned long)delta : (unsigned long)(-delta);
-      xsmcSetInteger(xsVar(0),
-                     level); // Gebruik een tijdelijke variabele voor de aanroep
+      xsmcSetInteger(xsVar(0), level); // Gebruik een tijdelijke variabele voor de aanroep
       xsmcCall(xsResult, xsArg(0), xsID("write"), &(xsVar(0)), NULL);
       if (us > 0) {
         udelay(us);

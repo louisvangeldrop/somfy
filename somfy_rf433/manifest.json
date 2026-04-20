@@ -8,12 +8,14 @@
     "$(EXAMPLES)/manifest_base.json",
     "$(MODDABLE)/modules/io/manifest.json",
     "$(MODULES)/base/microseconds/manifest.json",
-    "../cc1101/manifest.json",
     "../digitalPulse/manifest.json"
   ],
   "modules": {
     "somfy": "../somfy/somfy.js",
-    "somfy_cc1101": "./somfy_cc1101.js"
+    "somfy_rf433": "./somfy_rf433.js"
   },
-  "config": {}
+  "config": {
+    "pinTX": 20,
+    "pinVCC": 15
+  }
 }

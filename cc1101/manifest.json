@@ -1,0 +1,29 @@
+{
+  "build": {
+    "BUILD": "$(MODDABLE)/build",
+    "IO": "$(MODDABLE)/modules/io",
+    "EXAMPLES": "$(MODDABLE)/examples"
+  },
+  "include": [
+    "$(EXAMPLES)/manifest_base.json",
+    "$(MODDABLE)/modules/io/manifest.json"
+  ],
+  "modules": {
+    "cc1101": "./cc1101"
+  },
+  "config": {
+    "spi": {
+      "out": 21,
+      "in": 19,
+      "clock": 18,
+      "hz": 1000000,
+      "mode": 0,
+      "active": 0,
+      "port": 1
+    },
+    "cc1101": {
+      "select": 5,
+      "gdo0": 12
+    }
+  }
+}

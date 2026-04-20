@@ -8,8 +8,8 @@ const pinVCC = new Digital({ pin: config.pinVCC || 13, mode: Digital.Output });
 export const somfyCommands = somfy.somfyCommands;
 
 export function sendCmd(cmd, address, rollingCode, repeats = 3) {
-	pinVCC.write(1); // Zet TX pin hoog
+	pinVCC.write(1); // Set VCC pin highto power the RF transmitter
 	let pulses = somfy.sendCmd(cmd, address, rollingCode, repeats)
 	digitalPulse(pinTX, pulses)
-	pinVCC.write(0); // Zet TX pin laag na het verzenden
+	pinVCC.write(0); // Set VCC pin low after sending
 }

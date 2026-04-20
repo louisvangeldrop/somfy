@@ -1,73 +1,51 @@
-# Somfy CC1101 Module
+# somfy_cc1101
 
-This module provides functionality for controlling Somfy RTS (Radio Technology Somfy) devices, such as motorized blinds and shades, using a CC1101 radio frequency transceiver. It is designed for use with the Moddable SDK on embedded devices.
+This module provides CC1101-based transmission support for Somfy RTS commands in the Moddable project.
 
-## Overview
+It integrates the Somfy command encoder from `../somfy/somfy.js` with the `cc1101` transceiver and the `digitalPulse` module for RF pulse output.
 
-The module implements the Somfy RTS protocol, which uses 433.42 MHz radio frequency communication. It handles the construction of Somfy command frames, including rolling code management, Manchester encoding, and transmission via the CC1101 transceiver.
+## Purpose
 
-## Features
+`somfy_cc1101` converts Somfy protocol commands into CC1101-compatible pulse sequences and sends them through the CC1101 radio.
 
-- **Frame Building**: Constructs Somfy RTS frames with proper encryption, checksum calculation, and obfuscation.
-- **Rolling Code Support**: Includes rolling code handling for security (though synchronization with existing remotes is left to the user).
-- **Manchester Encoding**: Implements Manchester encoding for reliable data transmission.
-- **CC1101 Integration**: Configures and controls the CC1101 transceiver for 433.42 MHz operation.
-- **GPIO Fallback**: Includes a GPIO bit-bang fallback for testing purposes.
+## Files
+
+- `somfy_cc1101.js` - module implementation that initializes CC1101 and sends Somfy commands.
+- `manifest.json` - module manifest with build includes and dependencies.
 
 ## Usage
 
-### Initialization
+Import the module and use `sendCmd()` to transmit Somfy commands:
 
-First, initialize the CC1101 transceiver:
+```js
+import * as somfyCC1101 from "somfy_cc1101";
 
-```javascript
-import { initCC1101 } from "somfy";
+const command = "UP";
+const address = 0x123456; // Somfy device address
+const rollingCode = 0x0001;
+const repeats = 3;
 
-initCC1101();
+somfyCC1101.sendCmd(command, address, rollingCode, repeats);
 ```
 
-### Sending Commands
+## Behavior
 
-Send commands to Somfy devices using the `sendCmd` function:
-
-```javascript
-import { sendCmd, somfyCommands } from "somfy";
-
-const address = 0x123456;  // Remote address
-const rollingCode = 0x0001;  // Rolling code (must be synchronized with the device)
-const repeats = 5;  // Number of frame repetitions
-
-sendCmd(somfyCommands.UP, address, rollingCode, repeats);
-```
-
-Available commands:
-- `MY`: My position
-- `UP`: Up
-- `MyUP`: My + Up
-- `DOWN`: Down
-- `MyDOWN`: My + Down
-- `UP_DOWN`: Up + Down (toggle)
-- `PROG`: Programming mode
-- `SUN_FLAG`: Sun and Flag
-- `CFLAG`: Flag
-
-### Configuration
-
-The module uses configuration from the manifest.json file for SPI and CC1101 pin settings. Ensure your hardware matches these configurations.
-
-## Important Notes
-
-- **Rolling Code**: Somfy devices use a rolling code for security. This module provides basic frame construction, but you must implement and maintain synchronization of the rolling code with your existing Somfy remote.
-- **Frequency**: Configured for 433.42 MHz operation based on Tasmota settings.
-- **Hardware**: Requires a CC1101 transceiver connected via SPI.
-- **Protocol Details**: For in-depth information about the Somfy RTS protocol, see the references in the main project README.
+- Calls `cc1101.initCC1101()` to initialize the CC1101 radio.
+- Uses `somfy.sendCmd()` to build the Somfy pulse pattern.
+- Inverts pulses for CC1101's active-low output.
+- Uses `digitalPulse()` to send RF pulses on the configured transmit pin.
+- Returns the radio to `SIDLE` after transmission.
 
 ## Dependencies
 
-- Moddable SDK
-- CC1101 transceiver
-- SPI interface
+This module depends on:
 
-## License
+- `somfy` (command encoding)
+- `cc1101` (CC1101 transceiver control)
+- `digitalPulse` (pulse generation)
+- Moddable SDK runtime
 
-This code is provided as-is for educational and development purposes. Ensure compliance with local regulations regarding radio frequency transmissions.
+## Notes
+
+- The module expects CC1101 hardware initialization to be performed before sending commands.
+- The actual Somfy command set and rolling code management are handled by the `somfy` module.

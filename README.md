@@ -1,6 +1,6 @@
 # Somfy RTS Controller
 
-This project implements a wireless controller for Somfy RTS (Radio Technology Somfy) motorized devices, such as blinds, shades, and awnings, using the Moddable SDK on ESP32-based microcontrollers. It provides an HTTP API for remote control and integrates with a CC1101 radio frequency transceiver for 433.42 MHz communication.
+This project implements a wireless controller for Somfy RTS (Radio Technology Somfy) motorized devices, such as blinds, shades, and awnings, using the Moddable SDK on ESP32-based microcontrollers. It provides an HTTP API for remote control and supports multiple RF transmission backends.
 
 ## Overview
 
@@ -11,45 +11,48 @@ The system allows control of multiple Somfy RTS motors through a simple web inte
 - **HTTP API**: Simple REST-like interface for controlling motors via HTTP requests
 - **Multi-Motor Support**: Configure and control multiple Somfy RTS devices
 - **Rolling Code Management**: Automatic increment and persistence of rolling codes for security
-- **CC1101 Integration**: Direct control of CC1101 transceiver for reliable RF transmission
+- **Flexible RF Backend**: Choose between CC1101 transceiver or generic 433 MHz RF transmitter
 - **Configuration Persistence**: Motor settings saved to flash memory
 - **WiFi Connectivity**: Built-in web server for remote access
 - **Hardware Flexibility**: Support for different ESP32 boards with configurable pinouts
 
 ## Hardware Requirements
 
+### For CC1101 Backend
 - ESP32 microcontroller with dual-core CPU (original ESP32, preferably not C3, C6, or other single-core variants)
 - CC1101 433 MHz RF transceiver module
 - SPI connection between ESP32 and CC1101
 - Antenna for 433 MHz transmission
 
-## Pin Configuration
+### For RF433 Backend
+- ESP32 microcontroller (any variant)
+- Generic 433 MHz RF transmitter module
+- Simple GPIO connections for data and power
+- Antenna for 433 MHz transmission
 
-**Note**: This software requires dual-core ESP32 chips. ESP32-C3 and ESP32-C6 (single-core) may work.
+## Module Selection
 
-### ESP32 DevKit (recommended)
-- SPI MOSI: GPIO 21
-- SPI MISO: GPIO 19
-- SPI CLK: GPIO 18
-- CC1101 CS: GPIO 5
-- CC1101 GDO0: GPIO 12
+This project is modular and supports two RF transmission backends:
 
-### ESP32-C3 (not supported?)
-- SPI MOSI: GPIO 7
-- SPI MISO: GPIO 2
-- SPI CLK: GPIO 6
-- CC1101 CS: GPIO 9
-- CC1101 GDO0: GPIO 10
+- **[somfy_cc1101](./somfy_cc1101/)** — Uses a CC1101 SPI radio transceiver for more reliable and efficient transmission
+- **[somfy_rf433](./somfy_rf433/)** — Uses a simple GPIO-based 433 MHz RF transmitter
+
+Choose one in your project's `manifest.json` by including its manifest file in the `include` section.
+
+See each module's README for detailed configuration and pin requirements.
 
 ## Software Setup
 
 1. Install the Moddable SDK
-2. Configure your WiFi credentials in `manifest.json`
-3. Build and flash the project:
+2. Choose your RF backend:
+   - Edit the project `manifest.json` to include either `./somfy_cc1101/manifest.json` or `./somfy_rf433/manifest.json` in the `include` section
+   - Update the import in your application code to use the selected module
+3. Configure your WiFi credentials and motors in `manifest.json`
+4. Build and flash the project:
    ```bash
    mcconfig -m -p esp32
    ```
-   For ESP32-C3 (not recommended, single-core):
+   For ESP32-C3:
    ```bash
    mcconfig -m -p esp32/c3_32s_kit
    ```
@@ -97,11 +100,19 @@ Available Somfy commands:
 - `SUN_FLAG`: Sun and flag mode
 - `CFLAG`: Flag mode
 
+## Project Modules
+
+- **somfy** — Core Somfy RTS protocol encoder
+- **somfy_cc1101** — CC1101 SPI transceiver backend (optional)
+- **somfy_rf433** — Simple RF transmitter backend (optional)
+- **cc1101** — CC1101 hardware driver (required for CC1101 backend)
+- **digitalPulse** — GPIO pulse generation utility
+
 ## Dependencies
 
 - Moddable SDK
-- `somfy_cc1101` module (included)
-- ESP32 WiFi and SPI support
+- One of the RF backends: `somfy_cc1101` or `somfy_rf433`
+- ESP32 WiFi and I/O support
 
 ## Security Notes
 

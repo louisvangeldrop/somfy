@@ -18,14 +18,14 @@ It integrates the Somfy command encoder from `../somfy/somfy.js` with the `digit
 Import the module and call `sendCmd()` to transmit Somfy commands:
 
 ```js
-import * as somfyRF433 from "somfy_rf433";
+import * as somfy from "somfy_rf433";
 
 const command = "DOWN";
 const address = 0x123456; // Somfy device address
 const rollingCode = 0x0001;
 const repeats = 3;
 
-somfyRF433.sendCmd(command, address, rollingCode, repeats);
+somfy.sendCmd(command, address, rollingCode, repeats);
 ```
 
 ## Behavior

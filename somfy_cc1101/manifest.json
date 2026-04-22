@@ -12,7 +12,7 @@
     "../somfy/manifest.json"
   ],
   "modules": {
-    "somfy_cc1101": "./somfy_cc1101.js"
+    "somfy_rts": "./somfy_cc1101.js"
   },
   "config": {}
 }

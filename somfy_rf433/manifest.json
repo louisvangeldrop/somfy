@@ -11,7 +11,7 @@
     "../somfy/manifest.json"
   ],
   "modules": {
-    "somfy_rf433": "./somfy_rf433.js"
+    "somfy_rts": "./somfy_rf433.js"
   },
   "config": {
     "pinTX": 20,

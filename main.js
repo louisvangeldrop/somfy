@@ -2,7 +2,7 @@ import { Server } from "http";
 import Net from "net";
 import MDNS from "mdns";
 import config from "mc/config";
-import * as Somfy from "somfy_rf433";
+import * as Somfy from "somfy_rts"; // Import the somfy module (either somfy_rf433 or somfy_cc1101 based on manifest)
 
 const ssid = config.ssid;
 const password = config.password;

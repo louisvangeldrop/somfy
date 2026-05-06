@@ -3,27 +3,25 @@ import { File, Iterator, System } from "file";
 import structuredClone from "structuredClone";
 import config from "mc/config";
 
-var motors = structuredClone(config.motors)
-
 const motorsFileName = config.file.root + "somfy_motors.json";
 
-try {
-	let file = new File(motorsFileName, true);
-	let json = file.read(String);
-	file.close();
-	motors = JSON.parse(json);
-} catch (e) {
-	trace("somfy_motors.json not found → empty list\n");
-}
-
-// Rolling codes omzetten van string naar nummer
-Object.keys(motors).forEach(id => {
-	if (typeof motors[id].rolling === "string") {
-		motors[id].rolling = parseInt(motors[id].rolling, 16);
-	}
-});
-
 export function getMotors() {
+	let motors = structuredClone(config.motors)
+	try {
+		let file = new File(motorsFileName, true);
+		let json = file.read(String);
+		file.close();
+		motors = JSON.parse(json);
+	} catch (e) {
+		trace("somfy_motors.json not found → empty list\n");
+	}
+
+	// Rolling codes string=> number
+	Object.keys(motors).forEach(id => {
+		if (typeof motors[id].rolling === "string") {
+			motors[id].rolling = parseInt(motors[id].rolling, 16);
+		}
+	});
 	return motors;
 }
 

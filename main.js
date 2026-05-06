@@ -8,14 +8,14 @@ const ssid = config.ssid;
 const password = config.password;
 const hostName = config.mdns;
 
-var repeats = config.repeats || 5; // Default aantal herhalingen als niet gespecificeerd in config
+var repeats = config.repeats || 5; // Default number of repeats, can be overridden by query parameter
 
 const somfy = Somfy
 var motors = somfy.getMotors();
 
 async function setup() {
 	let ip = Net.get("IP");
-	trace(`Gebruik: http://${ip}/somfy?id=11&action=up\n`);
+	trace(`Usage: http://${ip}/somfy?id=11&action=up\n`);
 
 	try {
 		let mdns = new MDNS({ hostName }, function (message, value) {
@@ -54,7 +54,7 @@ async function setup() {
 			if (path.startsWith("/somfy")) {
 				let id = query.id;
 				let action = (query.action || "down").toUpperCase();
-				repeats = parseInt(query.repeats ?? 5); // Gebruik repeats uit query als aanwezig, anders de globale waarde
+				repeats = parseInt(query.repeats ?? 5); // Update repeats if specified in query
 
 				let motor = motors[id];
 				if (!motor) {

@@ -50,7 +50,7 @@ See each module's README for detailed configuration and pin requirements.
 3. Configure your WiFi credentials and motors in `manifest.json`
 4. Build and flash the project:
    ```bash
-   mcconfig -m -p esp32/m5atom_matrix
+   mcconfig -m -p esp32
    ```
    For ESP32-C3:
    ```bash
